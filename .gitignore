@@ -1,0 +1,21 @@
+# Your financial data - never commit
+data/
+*.db
+*.db-wal
+*.db-shm
+# Environment
+.venv/
+__pycache__/
+.pytest_cache/
+# Bake-off experiments
+.venv-bakeoff/
+bakeoff/.cache/
+bakeoff/.synthetic-run.log
+# Your own statements - never commit
+statements/
+# Docling's local models (downloaded once)
+.models/
+# macOS folder metadata
+.DS_Store
+# Private planning notes - never commit
+.context/

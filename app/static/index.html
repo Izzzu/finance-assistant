@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Local Accountant</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo" aria-hidden="true">◧</span> Local Accountant</div>
+  <nav class="tabs" role="tablist">
+    <button data-view="report" class="tab active">Report <span id="reviewBadge" class="badge hidden"></span></button>
+    <button data-view="upload" class="tab">Upload</button>
+    <button data-view="settings" class="tab">Settings</button>
+  </nav>
+  <div id="aiStatus" class="ai-status" title="">🔒 <span>Local AI…</span></div>
+</header>
+
+<main>
+  <!-- ============================ REPORT ============================ -->
+  <section id="view-report" class="view">
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Period">
+        <button data-mode="month" class="active">Month</button>
+        <button data-mode="year">Year</button>
+        <button data-mode="all">All time</button>
+      </div>
+      <div class="period-nav">
+        <button id="prevPeriod" class="icon-btn" aria-label="Previous">◀</button>
+        <span id="periodLabel" class="period-label">—</span>
+        <button id="nextPeriod" class="icon-btn" aria-label="Next">▶</button>
+      </div>
+      <select id="accountFilter" aria-label="Account"><option value="">All accounts</option></select>
+      <input id="search" type="search" placeholder="Search text or amount…" aria-label="Search">
+      <a id="exportCsv" class="link-btn" href="/api/export.csv">Export CSV</a>
+    </div>
+    <div id="reportBody"></div>
+  </section>
+
+  <!-- ============================ UPLOAD ============================ -->
+  <section id="view-upload" class="view hidden">
+    <div id="dropzone" class="dropzone" tabindex="0">
+      <div class="dz-icon" aria-hidden="true">⇪</div>
+      <p><strong>Drop your statements here</strong> or <label class="link">browse<input id="fileInput" type="file" multiple accept=".pdf,.csv,application/pdf,text/csv" hidden></label></p>
+      <p class="muted">PostFinance · Swisscard · Wise PDFs (CSV also works). Several files at once is fine.<br>Files are read on this computer and not stored.</p>
+    </div>
+    <div id="fileList" class="file-list"></div>
+    <div class="scan-bar">
+      <div id="scanStage" class="muted"></div>
+      <div class="progress hidden" id="scanProgress"><div class="progress-fill" id="scanProgressFill"></div></div>
+      <button id="scanBtn" class="primary" disabled>Scan</button>
+    </div>
+  </section>
+
+  <!-- ============================ SETTINGS ============================ -->
+  <section id="view-settings" class="view hidden">
+    <div class="subtabs">
+      <button data-sub="categories" class="active">Categories</button>
+      <button data-sub="rules">Remembered rules</button>
+      <button data-sub="files">Scanned files</button>
+      <button data-sub="ai">AI &amp; currency</button>
+      <button data-sub="privacy">Privacy</button>
+    </div>
+    <div id="settingsBody"></div>
+  </section>
+</main>
+
+<div id="toast" class="toast hidden" role="status"></div>
+
+<dialog id="catDialog">
+  <form method="dialog" id="catForm">
+    <h3 id="catDialogTitle">New category</h3>
+    <label>Name <input name="name" required maxlength="60"></label>
+    <label>What belongs here <span class="muted">(the local AI reads this)</span>
+      <textarea name="description" rows="3" maxlength="300"></textarea></label>
+    <div class="row2">
+      <label>Type
+        <select name="kind"><option value="expense">Spending</option><option value="income">Income</option><option value="transfer">Transfer (not spending)</option></select>
+      </label>
+      <label>Report
+        <select name="period"><option value="monthly">Monthly</option><option value="yearly">Yearly</option></select>
+      </label>
+    </div>
+    <div class="dialog-actions">
+      <button value="cancel" formnovalidate>Cancel</button>
+      <button value="ok" class="primary">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.10", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+      - name: Install locked dependencies (uv.lock, hash-checked)
+        run: uv sync --frozen
+      - name: Type check (pyright, strict for app/)
+        run: uv run pyright
+      - name: Tests (Docling for real, simulated AI; API & security; no-network)
+        run: uv run pytest
+      - name: License check (no GPL/AGPL/SSPL dependencies)
+        run: uv run pip-licenses --from=mixed --partial-match --fail-on="GPL;AGPL;SSPL;Commons Clause"

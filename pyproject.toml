@@ -1,0 +1,42 @@
+[project]
+name = "local-accountant"
+version = "0.2.0"
+description = "Private personal-finance assistant: bank statements -> categorized reports, with a local AI only"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "python-multipart",
+    "pdfplumber",
+    # PDF layout/table understanding, runs locally (MIT). Pinned: the newest release isn't on every mirror yet.
+    "docling==2.137.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "reportlab",
+    "httpx",
+    "pip-licenses",
+    "pyright>=1.1.414",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["live: needs a running Ollama with the parser model (run with: uv run pytest -m live)"]
+addopts = "-m 'not live'"
+
+[tool.pyright]
+include = ["app", "start.py", "tests"]
+exclude = ["**/__pycache__", ".venv", ".venv-bakeoff", "bakeoff", "tests/reference_rules.py"]
+strict = ["app", "start.py"]          # the app itself: strict typing
+typeCheckingMode = "standard"         # tests: standard checking
+pythonVersion = "3.10"
+venvPath = "."
+venv = ".venv"
+extraPaths = ["app", "tests"]
